@@ -12,15 +12,14 @@ main:
 	$(CC) -std=$(STD) -c -g $(SRC)
 	$(CC) -std=$(STD) -o $(BIN) -g main.c $(OBJ)
 
-.PHONY: install
+.PHONY: install uninstall clean
+
 install: main
 	cp $(BIN) $(INSTALL_PATH)
 	rm *.o *.out *~ $(BIN) src/*~ src/*.gch
 
-.PHONY: uninstall
 uninstall:
 	sudo rm $(INSTALL_PATH)/$(BIN)
 
-.PHONY: clean
 clean:
 	rm *.o *.out *~ $(BIN) src/*~ src/*.gch
