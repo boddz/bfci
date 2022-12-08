@@ -29,3 +29,13 @@ Below are the two main ways of interpreting Brainf*** code with bfci:
   # This will take the entered argument from the -i option and interpret it.
   $ bfci -i "+[--------->+<]>+.++[--->++<]>+.>++++++++++."
 ```
+
+You can also instead translate inputted Brainf*** code into C code:
+
+```bash
+  # This will parse and translate into C from specified file.
+  $ bfci -c translated.c -f examples/hello_world.bf
+
+  # This will take the entered argument from -i options and translate it.
+  $ bfci -i "+[--------->+<]>+.++[--->++<]>+.>++++++++++." -c translated.c.
+```
