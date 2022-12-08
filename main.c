@@ -33,21 +33,31 @@ int main(int argc, char** argv)
   char* bf_source_file_name = {0};
   char* bf_source_opt_arg = {0};
   char* bf_file_contents_array = {0};
+  char* c_output_opt_arg = {0};
   FILE* bf_source_file_handle;
 
-  bool interpret_arg_opt = false;
+  bool file_arg_opt = false;
+  bool interp_arg_opt = false;
+  bool c_arg_opt = false;
 
   opterr = 0; /* Do not print default getopt error messages. */
 
-  while((option = getopt(argc, argv, "hf:i:v")) != -1 && option != 1)
+  while((option = getopt(argc, argv, "hf:i:c:v")) != -1 && option != 1)
     switch(option) {
     case 'h': printf("usage: %s [options] [target]\n", program); break;
-    case 'f': bf_source_file_name = optarg; break; /* Source file name. */
+    case 'f': /* Source file name. */
+      file_arg_opt = true;
+      bf_source_file_name = optarg;
+      break;
     case 'i': /* Instead of reading file, interpret argument bf code. */
-      interpret_arg_opt = true;
+      interp_arg_opt = true;
       bf_source_opt_arg = optarg;
       break;
-    case 'v': printf("%s: current version %s\n", program, VERSION); return 0;
+    case 'c': /* Translate Brainf*** code into C and write to output file. */
+      c_arg_opt = true;
+      c_output_opt_arg = optarg;
+      break;
+      case 'v': printf("%s: current version %s\n", program, VERSION); return 0;
     case '?': /* Getopt returns '?' is returned when either a required argument
 	       * is missing/ if a non-valid argument is entered. For more
                * information check man pages for getopt(3) errors. */
@@ -56,8 +66,16 @@ int main(int argc, char** argv)
       return 1;
     }
 
-  /* If -i option is used interpret from argument & skip file checks below. */
-  if(interpret_arg_opt == true) {
+  /* -c option is used paired with -i option, translate from arg array. */
+  if(c_arg_opt == true && interp_arg_opt == true) {
+    if(bf_into_c(bf_source_opt_arg, c_output_opt_arg) == 1) {
+      fprintf(stderr, "%s: error: translator failed to execute\n", program);
+      return 1;
+    }
+    return 0;
+  }
+  /* -i option is used interpret from argument & skip file checks below. */
+  else if(interp_arg_opt == true) {
     if(bf_interpreter(bf_source_opt_arg) == 1) {
       fprintf(stderr, "%s: error: interpreter failed to execute\n", program);
       return 1;
@@ -82,13 +100,25 @@ int main(int argc, char** argv)
     return 1;
   }
 
+  bf_source_file_handle = fopen(bf_source_file_name, "r");
   bf_file_contents_array = bf_file_to_array(bf_source_file_handle);
 
-  if(bf_interpreter(bf_file_contents_array) == 1) {
-    fprintf(stderr, "%s: error: interpreter failed to execute\n", program);
-    return 1;
+  /* -c option is used paired with -f option, translate from Bf file. */
+  if(c_arg_opt == true && file_arg_opt == true) {
+    if(bf_into_c(bf_file_contents_array, c_output_opt_arg) == 1) {
+      fprintf(stderr, "%s: error: translator failed to execute\n", program);
+      return 1;
+    }
+    return 0;
   }
+  /* Only the -f option is specified. */
+  else if(file_arg_opt == true)
+    if (bf_interpreter(bf_file_contents_array) == 1) {
+      fprintf(stderr, "%s: error: interpreter failed to execute\n", program);
+      return 1;
+    }
 
+  /* Clean up! */
   free(bf_file_contents_array);
 
   return 0;
