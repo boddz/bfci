@@ -1,10 +1,10 @@
-CC = gcc
-STD = c99
-BIN = bfci
-SRC = src/interpreter.h src/interpreter.c
-OBJ = interpreter.o
+CC := gcc
+STD := c99
+BIN := bfci
+SRC := src/interpreter.h src/interpreter.c
+OBJ := interpreter.o
 
-INSTALL_PATH = /usr/bin/
+INSTALL_PATH := /usr/bin/
 
 all: main
 
