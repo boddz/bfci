@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 
   while((option = getopt(argc, argv, "hf:i:c:v")) != -1 && option != 1)
     switch(option) {
-    case 'h': printf("usage: %s [options] [target]\n", program); break;
+    case 'h': printf("usage: %s [options] [target]\n", program); return 0;
     case 'f': /* Source file name. */
       file_arg_opt = true;
       bf_source_file_name = optarg;
@@ -65,6 +65,9 @@ int main(int argc, char** argv)
 	      "see usage: %s -h\n", program, program );
       return 1;
     }
+
+  /* No options just a filename entered. */
+  if(optind == 1 && !optarg) bf_source_file_name = argv[1];
 
   /* -c option is used paired with -i option, translate from arg array. */
   if(c_arg_opt == true && interp_arg_opt == true) {
@@ -111,8 +114,8 @@ int main(int argc, char** argv)
     }
     return 0;
   }
-  /* Only the -f option is specified. */
-  else if(file_arg_opt == true)
+  /* Only the -f option is specified or just filename entered. */
+  else if(file_arg_opt == true || optind == 1 && !optarg)
     if (bf_interpreter(bf_file_contents_array) == 1) {
       fprintf(stderr, "%s: error: interpreter failed to execute\n", program);
       return 1;
