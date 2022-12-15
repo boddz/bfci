@@ -25,7 +25,7 @@ Below are the two main ways of interpreting Brainf*** code with bfci:
 ```bash
 # This will parse and interpret the code from a specified file.
 $ bfci examples/hello_world.bf
-# Or this works the same
+# Or this works the same.
 $ bfci -f examples/hello_world.bf
 
 # This will take the entered argument from the -i option and interpret it.
