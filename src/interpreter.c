@@ -4,12 +4,10 @@
  * of helper functions to go along side it for parsing code/ file IO. */
 
 
-#include <stdbool.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "interpreter.h"
+#include "interpreter.h" /* stdbool.h stdio.h */
 
 
 /* Returns true if the specified file is of a valid extention type.

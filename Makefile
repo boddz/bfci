@@ -1,18 +1,19 @@
 CC := gcc
 STD := c99
 BIN := bfci
-SRC := src/interpreter.h src/interpreter.c
-OBJ := interpreter.o
+SRC := src/
 
 INSTALL_PATH := /usr/bin/
 
 all: main
 
-main:
-	$(CC) -std=$(STD) -c -g $(SRC)
-	$(CC) -std=$(STD) -o $(BIN) -g main.c $(OBJ)
+main: interpreter.o
+	$(CC) -std=$(STD) -I $(SRC) -o $(BIN) -g main.c interpreter.o
 
-.PHONY: install uninstall clean
+.PHONY: interpreter.o install uninstall clean
+
+interpreter.o:
+	$(CC) -g -c $(SRC)/interpreter.h $(SRC)/interpreter.c
 
 install: main
 	cp $(BIN) $(INSTALL_PATH)

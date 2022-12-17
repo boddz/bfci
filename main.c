@@ -7,14 +7,12 @@
 
 
 #include <getopt.h>
-#include <stdbool.h>
-#include <stdio.h>
 #include <stdlib.h>
 
-#include "src/interpreter.h"
+#include "interpreter.h" /* stdbool.h stdio.h */
 
 
-#define VERSION "1.0.0"
+#define VERSION "1.0.1"
 
 
 int main(int argc, char** argv)
